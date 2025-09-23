@@ -105,17 +105,23 @@ if (courses.length === 0) {
 
 // Simulate API calls
 export const getCourses = async (): Promise<Course[]> => {
-  return Promise.resolve(courses);
+  // deep copy to avoid mutations affecting the "database"
+  return Promise.resolve(JSON.parse(JSON.stringify(courses.map(c => ({...c, dateObj: c.dateObj.toISOString()}))
+  )).map((c: any) => ({...c, dateObj: new Date(c.dateObj)})));
 };
 
 export const getCourseById = async (id: string): Promise<Course | undefined> => {
-  return Promise.resolve(courses.find(course => course.id === id));
+  const course = courses.find(course => course.id === id);
+  if (!course) return undefined;
+  // deep copy to avoid mutations affecting the "database"
+  return Promise.resolve(JSON.parse(JSON.stringify({...course, dateObj: course.dateObj.toISOString()}))).then(c => ({...c, dateObj: new Date(c.dateObj)}));
 };
 
 export const updateCourse = async (updatedCourse: Course): Promise<Course> => {
   const index = courses.findIndex(course => course.id === updatedCourse.id);
   if (index !== -1) {
-    courses[index] = updatedCourse;
+    courses[index] = JSON.parse(JSON.stringify({...updatedCourse, dateObj: updatedCourse.dateObj.toISOString()}));
+    courses[index].dateObj = new Date(courses[index].dateObj);
     return Promise.resolve(updatedCourse);
   }
   throw new Error('Course not found');

@@ -23,7 +23,7 @@ export async function updateChecklistItem(
     checklistItem.completed = completed;
 
     const completedCount = course.checklist.filter((item) => item.completed).length;
-    const totalCount = CHECKLIST_ITEMS_DATA.length;
+    const totalCount = course.checklist.length;
 
     let newStatus = course.status;
     if (completedCount === totalCount) {
@@ -37,6 +37,7 @@ export async function updateChecklistItem(
     
     await updateCourse(course);
 
+    // Revalidate all paths where course status is visible
     revalidatePath('/');
     revalidatePath('/calendar');
     revalidatePath(`/courses/${courseId}`);
