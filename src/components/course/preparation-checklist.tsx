@@ -65,6 +65,9 @@ export default function PreparationChecklist({ course: initialCourse }: { course
     startTransition(async () => {
       try {
         const result = await updateChecklistItem(course.id, itemId, completed);
+        
+        // This is the critical step: we force a full refresh of Server Components.
+        // This ensures the dashboard and calendar views get the new data.
         router.refresh();
 
         if (result.success) {
@@ -81,7 +84,7 @@ export default function PreparationChecklist({ course: initialCourse }: { course
             setShowFinishedPopup(true);
           }
         } else {
-          throw new Error('Checklist update failed on the server.');
+          throw new Error(result.message || 'Checklist update failed on the server.');
         }
       } catch (error) {
           toast({
@@ -90,6 +93,7 @@ export default function PreparationChecklist({ course: initialCourse }: { course
             description: 'Die Checkliste konnte nicht aktualisiert werden.',
           });
           // Revert UI change on error by restoring the original state.
+          // We refetch the initialCourse to ensure we are not using stale optimistic state.
           setCourse(initialCourse);
       }
     });

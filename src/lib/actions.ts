@@ -8,8 +8,11 @@ export async function updateChecklistItem(
   courseId: string,
   itemId: number,
   completed: boolean
-): Promise<{ success: boolean; allCompleted: boolean; newStatus: CourseStatus }> {
+): Promise<{ success: boolean; allCompleted: boolean; newStatus: CourseStatus; message?: string }> {
   try {
+    // Adding a small delay to simulate network latency if needed for testing
+    // await new Promise(resolve => setTimeout(resolve, 500));
+
     const course = await getCourseById(courseId);
     if (!course) {
       throw new Error('Course not found');
@@ -38,6 +41,7 @@ export async function updateChecklistItem(
     await updateCourse(course);
 
     // Revalidate all paths where course status is visible to ensure synchronization
+    // This tells Next.js to re-fetch the data on the next request to these paths.
     revalidatePath('/');
     revalidatePath('/calendar');
     revalidatePath(`/courses/${courseId}`);
@@ -50,9 +54,14 @@ export async function updateChecklistItem(
       newStatus: newStatus,
     };
   } catch (error) {
-    console.error('Failed to update checklist item:', error);
-    // In case of an error, return the original status or a sensible default.
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    console.error('Failed to update checklist item:', message);
     const course = await getCourseById(courseId);
-    return { success: false, allCompleted: false, newStatus: course?.status || 'not-started' };
+    return { 
+      success: false, 
+      allCompleted: false, 
+      newStatus: course?.status || 'not-started',
+      message: message
+    };
   }
 }
