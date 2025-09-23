@@ -10,20 +10,14 @@ const createInitialChecklist = (): ChecklistItem[] =>
 
 const generateInitialCourses = () => {
   const today = new Date();
-  const getNextDay = (start: Date, dayOfWeek: number): Date => {
-    const date = new Date(start.getTime());
-    date.setDate(start.getDate() + (dayOfWeek - start.getDay() + 7) % 7);
-    return date;
-  }
-
-  const monday = getNextDay(today, 1);
   
   return [
     {
       id: '1',
       name: 'Next.js Grundlagen',
-      date: format(monday, 'EEEE, dd.MM.yyyy', { locale: de }),
-      day: getDay(monday),
+      dateObj: today,
+      date: format(today, 'EEEE, dd.MM.yyyy', { locale: de }),
+      day: getDay(today),
       room: 'Grosser Schulungsraum',
       description: 'Einführung in die Grundlagen von Next.js, einschliesslich serverseitigem Rendering, statischer Seitengenerierung und API-Routen.',
       status: 'not-started' as CourseStatus,
@@ -32,8 +26,9 @@ const generateInitialCourses = () => {
     {
       id: '2',
       name: 'TypeScript für Fortgeschrittene',
-      date: format(addDays(monday, 1), 'EEEE, dd.MM.yyyy', { locale: de }),
-      day: getDay(addDays(monday, 1)),
+      dateObj: addDays(today, 1),
+      date: format(addDays(today, 1), 'EEEE, dd.MM.yyyy', { locale: de }),
+      day: getDay(addDays(today, 1)),
       room: 'Kleiner Schulungsraum',
       description: 'Vertiefung der TypeScript-Kenntnisse mit fortgeschrittenen Typen, Generics und Decorators. Perfekt für erfahrene Entwickler.',
       status: 'in-progress' as CourseStatus,
@@ -45,8 +40,9 @@ const generateInitialCourses = () => {
     {
       id: '3',
       name: 'React State Management',
-      date: format(addDays(monday, 2), 'EEEE, dd.MM.yyyy', { locale: de }),
-      day: getDay(addDays(monday, 2)),
+      dateObj: addDays(today, 2),
+      date: format(addDays(today, 2), 'EEEE, dd.MM.yyyy', { locale: de }),
+      day: getDay(addDays(today, 2)),
       room: 'Grosser Schulungsraum',
       description: 'Ein Überblick über verschiedene State-Management-Lösungen in React, von Context API bis hin zu Redux und Zustand.',
       status: 'completed' as CourseStatus,
@@ -55,13 +51,39 @@ const generateInitialCourses = () => {
     {
       id: '4',
       name: 'Design-Systeme mit Storybook',
-      date: format(addDays(monday, 3), 'EEEE, dd.MM.yyyy', { locale: de }),
-      day: getDay(addDays(monday, 3)),
+      dateObj: addDays(today, 3),
+      date: format(addDays(today, 3), 'EEEE, dd.MM.yyyy', { locale: de }),
+      day: getDay(addDays(today, 3)),
       room: 'Kleiner Schulungsraum',
       description: 'Lernen Sie, wie man mit Storybook robuste und wiederverwendbare UI-Komponenten für ein Design-System entwickelt.',
       status: 'not-started' as CourseStatus,
       checklist: createInitialChecklist(),
     },
+    {
+        id: '5',
+        name: 'Testing mit Jest & RTL',
+        dateObj: addDays(today, 5),
+        date: format(addDays(today, 5), 'EEEE, dd.MM.yyyy', { locale: de }),
+        day: getDay(addDays(today, 5)),
+        room: 'Grosser Schulungsraum',
+        description: 'Einführung in das Testen von React-Anwendungen mit Jest und der React Testing Library.',
+        status: 'not-started' as CourseStatus,
+        checklist: createInitialChecklist(),
+    },
+    {
+        id: '6',
+        name: 'Tailwind CSS Workshop',
+        dateObj: addDays(today, 6),
+        date: format(addDays(today, 6), 'EEEE, dd.MM.yyyy', { locale: de }),
+        day: getDay(addDays(today, 6)),
+        room: 'Kleiner Schulungsraum',
+        description: 'Ein praktischer Workshop zu den Grundlagen und fortgeschrittenen Konzepten von Tailwind CSS.',
+        status: 'in-progress' as CourseStatus,
+        checklist: [
+            ...CHECKLIST_ITEMS_DATA.slice(0, 1).map(item => ({ ...item, completed: true })),
+            ...CHECKLIST_ITEMS_DATA.slice(1).map(item => ({ ...item, completed: false })),
+        ],
+    }
   ];
 };
 

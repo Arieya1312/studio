@@ -21,6 +21,7 @@ export type ChecklistItem = {
 export type Course = {
   id: string;
   name: string;
+  dateObj: Date;
   date: string; // Using string for simplicity in mock data
   day: number; // Day of the week (0=Sun, 1=Mon, ...)
   room: 'Grosser Schulungsraum' | 'Kleiner Schulungsraum';
