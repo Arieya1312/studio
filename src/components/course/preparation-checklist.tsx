@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Course, ChecklistItem } from '@/lib/types';
+import type { Course } from '@/lib/types';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { updateChecklistItem } from '@/lib/actions';
@@ -18,12 +18,12 @@ export default function PreparationChecklist({ course: initialCourse }: { course
   const { toast } = useToast();
 
   const handleCheckChange = (itemId: number, completed: boolean) => {
-    // Create the potential new state for optimistic update, but we will rely on the server response.
-    const newChecklist = course.checklist.map((item) =>
+    // Optimistically update the UI for immediate feedback
+    const optimisticChecklist = course.checklist.map((item) =>
       item.id === itemId ? { ...item, completed } : item
     );
-    const newCourseState = { ...course, checklist: newChecklist };
-    setCourse(newCourseState);
+    const optimisticCourseState = { ...course, checklist: optimisticChecklist };
+    setCourse(optimisticCourseState);
 
     startTransition(async () => {
       const result = await updateChecklistItem(course.id, itemId, completed);
@@ -31,10 +31,10 @@ export default function PreparationChecklist({ course: initialCourse }: { course
       if (result.success) {
         // The server action was successful. Now, update the local state with the *definitive* new status
         // that the server has calculated and returned. This is the single source of truth.
-        const updatedCourseFromServer = { ...newCourseState, status: result.newStatus as Course['status'] };
-        setCourse(updatedCourseFromServer);
-
-        // Router refresh will re-fetch data on other pages, ensuring synchronization.
+        setCourse(prevCourse => ({ ...prevCourse, status: result.newStatus }));
+        
+        // This command tells Next.js to re-fetch data for Server Components.
+        // This is the key to ensuring all other parts of the UI (Dashboard, Calendar) get the new state.
         router.refresh(); 
 
         // Only show the popup if the server confirms all items are completed.
@@ -52,17 +52,7 @@ export default function PreparationChecklist({ course: initialCourse }: { course
       }
     });
   };
-
-  useEffect(() => {
-    // This effect handles showing the popup if the component loads and the course is already completed.
-    const allCompleted = course.checklist.every(item => item.completed);
-    if(allCompleted && course.status === 'completed' && !showFinishedPopup) {
-        // We only want to trigger the popup on the transition to completed, not if it's already completed.
-        // The main logic in handleCheckChange is better for this.
-        // This is a fallback for initial load.
-    }
-  }, [course.checklist, course.status, showFinishedPopup]);
-
+  
   return (
     <>
       <div className="space-y-6">
@@ -83,7 +73,7 @@ export default function PreparationChecklist({ course: initialCourse }: { course
             </Label>
           </div>
         ))}
-        {isPending && <div className="flex justify-center items-center"><Loader2 className="animate-spin text-primary" /></div>}
+        {isPending && <div className="flex justify-center items-center pt-4"><Loader2 className="animate-spin text-primary h-6 w-6" /></div>}
       </div>
       <FinishedPopup
         isOpen={showFinishedPopup}

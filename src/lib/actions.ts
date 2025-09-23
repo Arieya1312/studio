@@ -51,6 +51,8 @@ export async function updateChecklistItem(
     };
   } catch (error) {
     console.error('Failed to update checklist item:', error);
-    return { success: false, allCompleted: false, newStatus: 'not-started' };
+    // In case of an error, return the original status or a sensible default.
+    const course = await getCourseById(courseId);
+    return { success: false, allCompleted: false, newStatus: course?.status || 'not-started' };
   }
 }
