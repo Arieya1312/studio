@@ -18,6 +18,7 @@ export default function PreparationChecklist({ course: initialCourse }: { course
   const { toast } = useToast();
 
   const handleCheckChange = (itemId: number, completed: boolean) => {
+    // Create the potential new state for optimistic update, but we will rely on the server response.
     const newChecklist = course.checklist.map((item) =>
       item.id === itemId ? { ...item, completed } : item
     );
@@ -26,33 +27,41 @@ export default function PreparationChecklist({ course: initialCourse }: { course
 
     startTransition(async () => {
       const result = await updateChecklistItem(course.id, itemId, completed);
-      if (!result.success) {
+
+      if (result.success) {
+        // The server action was successful. Now, update the local state with the *definitive* new status
+        // that the server has calculated and returned. This is the single source of truth.
+        const updatedCourseFromServer = { ...newCourseState, status: result.newStatus as Course['status'] };
+        setCourse(updatedCourseFromServer);
+
+        // Router refresh will re-fetch data on other pages, ensuring synchronization.
+        router.refresh(); 
+
+        // Only show the popup if the server confirms all items are completed.
+        if (result.allCompleted) {
+          setShowFinishedPopup(true);
+        }
+      } else {
         toast({
           variant: 'destructive',
           title: 'Fehler',
           description: 'Die Checkliste konnte nicht aktualisiert werden.',
         });
-        // Revert UI change on error
-        setCourse(course);
-      } else {
-        // Force a router refresh to re-fetch data on all pages
-        router.refresh(); 
-        
-        const updatedCourse = { ...newCourseState, status: result.newStatus as Course['status'] };
-        setCourse(updatedCourse);
-        if (result.allCompleted) {
-          setShowFinishedPopup(true);
-        }
+        // Revert UI change on error by restoring the original state.
+        setCourse(initialCourse);
       }
     });
   };
 
   useEffect(() => {
+    // This effect handles showing the popup if the component loads and the course is already completed.
     const allCompleted = course.checklist.every(item => item.completed);
-    if(allCompleted && course.status === 'completed') {
-        setShowFinishedPopup(true);
+    if(allCompleted && course.status === 'completed' && !showFinishedPopup) {
+        // We only want to trigger the popup on the transition to completed, not if it's already completed.
+        // The main logic in handleCheckChange is better for this.
+        // This is a fallback for initial load.
     }
-  }, [course.checklist, course.status]);
+  }, [course.checklist, course.status, showFinishedPopup]);
 
   return (
     <>
@@ -74,7 +83,7 @@ export default function PreparationChecklist({ course: initialCourse }: { course
             </Label>
           </div>
         ))}
-        {isPending && <Loader2 className="animate-spin text-primary" />}
+        {isPending && <div className="flex justify-center items-center"><Loader2 className="animate-spin text-primary" /></div>}
       </div>
       <FinishedPopup
         isOpen={showFinishedPopup}

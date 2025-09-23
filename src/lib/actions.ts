@@ -2,13 +2,13 @@
 
 import { revalidatePath } from 'next/cache';
 import { getCourseById, updateCourse } from './data';
-import { CHECKLIST_ITEMS_DATA } from './types';
+import type { CourseStatus } from './types';
 
 export async function updateChecklistItem(
   courseId: string,
   itemId: number,
   completed: boolean
-): Promise<{ success: boolean; allCompleted: boolean; newStatus: string }> {
+): Promise<{ success: boolean; allCompleted: boolean; newStatus: CourseStatus }> {
   try {
     const course = await getCourseById(courseId);
     if (!course) {
@@ -25,7 +25,7 @@ export async function updateChecklistItem(
     const completedCount = course.checklist.filter((item) => item.completed).length;
     const totalCount = course.checklist.length;
 
-    let newStatus = course.status;
+    let newStatus: CourseStatus;
     if (completedCount === totalCount) {
       newStatus = 'completed';
     } else if (completedCount > 0) {
@@ -37,12 +37,13 @@ export async function updateChecklistItem(
     
     await updateCourse(course);
 
-    // Revalidate all paths where course status is visible
+    // Revalidate all paths where course status is visible to ensure synchronization
     revalidatePath('/');
     revalidatePath('/calendar');
     revalidatePath(`/courses/${courseId}`);
     revalidatePath(`/courses/${courseId}/prepare`);
 
+    // Return the new status so the client can update its state reliably
     return {
       success: true,
       allCompleted: completedCount === totalCount,
@@ -50,6 +51,6 @@ export async function updateChecklistItem(
     };
   } catch (error) {
     console.error('Failed to update checklist item:', error);
-    return { success: false, allCompleted: false, newStatus: '' };
+    return { success: false, allCompleted: false, newStatus: 'not-started' };
   }
 }
