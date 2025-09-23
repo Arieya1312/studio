@@ -10,6 +10,7 @@ import { Button } from '../ui/button';
 import { format, addDays, subDays, startOfWeek, isSameDay } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
+import { AlltronAcademyLogo } from '../logo';
 
 const rooms = ['Grosser Schulungsraum', 'Kleiner Schulungsraum'];
 
@@ -43,6 +44,9 @@ export default function CalendarView({ courses }: { courses: Course[] }) {
                     <span className="sr-only">Zurück zur Startseite</span>
                 </Link>
             </Button>
+            <h1 className="flex-1 text-center text-xl font-bold font-headline tracking-tight sm:text-2xl">
+                Kalender
+            </h1>
         </div>
         <div className='flex items-center gap-4'>
             <span className="text-xl font-semibold capitalize font-headline">
@@ -57,10 +61,9 @@ export default function CalendarView({ courses }: { courses: Course[] }) {
                 <span className="sr-only">Nächste Woche</span>
             </Button>
         </div>
-        <h1 className="flex-1 text-center text-xl font-bold font-headline tracking-tight sm:text-2xl">
-            Kalender
-        </h1>
-        <div className="w-40"></div>
+        <div className="w-48 flex justify-end">
+          <AlltronAcademyLogo className="h-9" />
+        </div>
       </header>
       <div className="flex-1 overflow-auto p-4 sm:p-6">
       <Card className="overflow-hidden shadow-lg min-w-[900px]">

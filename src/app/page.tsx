@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import { AlltronAcademyLogo } from '@/components/logo';
 
 function StatusBadge({ status }: { status: 'not-started' | 'in-progress' | 'completed' }) {
   const statusMap = {
@@ -31,6 +32,11 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col min-h-screen">
+       <header className="py-8 px-4 text-center">
+            <div className="flex justify-center">
+                <AlltronAcademyLogo className="h-12" />
+            </div>
+      </header>
       <main className="flex-1 container mx-auto p-4 md:p-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4">

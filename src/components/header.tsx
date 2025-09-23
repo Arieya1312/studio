@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from './ui/button';
+import { AlltronAcademyLogo } from './logo';
 
 export function Header({ title, backHref }: { title: string; backHref?: string }) {
   return (
@@ -16,6 +17,9 @@ export function Header({ title, backHref }: { title: string; backHref?: string }
       <h1 className="flex-1 text-xl font-bold font-headline tracking-tight sm:text-2xl">
         {title}
       </h1>
+      <div className="w-48 flex justify-end">
+          <AlltronAcademyLogo className="h-9" />
+      </div>
     </header>
   );
 }
