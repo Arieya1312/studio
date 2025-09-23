@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Check } from 'lucide-react';
 
 interface FinishedPopupProps {
@@ -25,6 +25,13 @@ export default function FinishedPopup({ isOpen, onClose, courseName, courseDate 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[480px] p-10 flex flex-col items-center justify-center text-center bg-background/95 backdrop-blur-sm">
+        <DialogHeader className="sr-only">
+          <DialogTitle>Vorbereitung erledigt</DialogTitle>
+          <DialogDescription>
+            Die Vorbereitung für den Kurs "{courseName}" am {courseDate} wurde erfolgreich abgeschlossen.
+          </DialogDescription>
+        </DialogHeader>
+
         <div className="mb-4">
           <h2 className="text-xl font-bold font-headline">{courseName}</h2>
           <p className="text-muted-foreground">{courseDate}</p>
