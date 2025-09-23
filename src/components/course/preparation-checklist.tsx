@@ -28,15 +28,15 @@ export default function PreparationChecklist({ course: initialCourse }: { course
     startTransition(async () => {
       const result = await updateChecklistItem(course.id, itemId, completed);
 
+      // This command tells Next.js to re-fetch data for Server Components.
+      // This is the key to ensuring all other parts of the UI (Dashboard, Calendar) get the new state.
+      router.refresh(); 
+
       if (result.success) {
         // The server action was successful. Now, update the local state with the *definitive* new status
         // that the server has calculated and returned. This is the single source of truth.
-        setCourse(prevCourse => ({ ...prevCourse, status: result.newStatus }));
+        setCourse(prevCourse => ({ ...prevCourse, status: result.newStatus, checklist: optimisticChecklist }));
         
-        // This command tells Next.js to re-fetch data for Server Components.
-        // This is the key to ensuring all other parts of the UI (Dashboard, Calendar) get the new state.
-        router.refresh(); 
-
         // Only show the popup if the server confirms all items are completed.
         if (result.allCompleted) {
           setShowFinishedPopup(true);
