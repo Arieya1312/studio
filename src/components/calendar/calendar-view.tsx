@@ -33,36 +33,34 @@ export default function CalendarView({ courses }: { courses: Course[] }) {
   };
 
   return (
-    <div className="flex flex-col h-full">
-        <header className="flex items-center justify-between gap-4 border-b px-4 h-16 md:px-6">
-            <div className="flex items-center gap-4">
-                 <Link href="/" className='text-xl font-bold font-headline tracking-tight sm:text-2xl'>Kurstage</Link>
-            </div>
-            <div className="flex items-center gap-4">
-                <span className="text-xl font-semibold capitalize font-headline">
-                {format(currentDate, 'MMMM yyyy', { locale: de })}
-                </span>
-                <Button variant="outline" size="icon" className="h-8 w-8" onClick={handlePrevWeek}>
-                    <ChevronLeft className="h-4 w-4" />
-                    <span className="sr-only">Vorherige Woche</span>
-                </Button>
-                <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleNextWeek}>
-                    <ChevronRight className="h-4 w-4" />
-                    <span className="sr-only">Nächste Woche</span>
-                </Button>
-            </div>
-             <h1 className="flex-1 text-right text-xl font-bold font-headline tracking-tight sm:text-2xl">
-                Kalender
-            </h1>
-        </header>
-        <div className="flex-1 overflow-auto">
-        <Card className="overflow-hidden shadow-lg m-4 min-w-[800px]">
-        <div className="grid grid-cols-[10rem,repeat(5,1fr)]">
+    <div className="flex flex-col h-full bg-background">
+      <header className="flex items-center justify-between gap-4 border-b px-4 h-16 md:px-6">
+        <div className="flex items-center gap-4">
+            <span className="text-xl font-semibold capitalize font-headline">
+              {format(currentDate, 'MMMM yyyy', { locale: de })}
+            </span>
+            <Button variant="outline" size="icon" className="h-8 w-8" onClick={handlePrevWeek}>
+                <ChevronLeft className="h-4 w-4" />
+                <span className="sr-only">Vorherige Woche</span>
+            </Button>
+            <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleNextWeek}>
+                <ChevronRight className="h-4 w-4" />
+                <span className="sr-only">Nächste Woche</span>
+            </Button>
+        </div>
+        <h1 className="flex-1 text-center text-xl font-bold font-headline tracking-tight sm:text-2xl">
+            Kalender
+        </h1>
+        <div className="w-40"></div>
+      </header>
+      <div className="flex-1 overflow-auto p-4 sm:p-6">
+      <Card className="overflow-hidden shadow-lg min-w-[900px]">
+        <div className="grid grid-cols-[12rem,repeat(5,minmax(0,1fr))]">
             {/* Header Row */}
             <div className="p-3 font-bold font-headline bg-muted/50 border-b border-r">Raum</div>
             {weekDays.map((day) => (
             <div key={day.toISOString()} className="p-3 font-bold font-headline text-center bg-muted/50 border-b border-r last:border-r-0">
-                <div className='capitalize'>{format(day, 'E', { locale: de })}</div>
+                <div className='capitalize'>{format(day, 'E', { locale: de })}.</div>
                 <div className="text-sm font-normal">{format(day, 'dd.MM', { locale: de })}</div>
             </div>
             ))}
@@ -104,8 +102,8 @@ export default function CalendarView({ courses }: { courses: Course[] }) {
             </div>
             ))}
         </div>
-        </Card>
-        </div>
+      </Card>
+      </div>
     </div>
   );
 }
