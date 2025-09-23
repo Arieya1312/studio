@@ -35,6 +35,9 @@ export default function PreparationChecklist({ course: initialCourse }: { course
         // Revert UI change on error
         setCourse(course);
       } else {
+        // Force a router refresh to re-fetch data on all pages
+        router.refresh(); 
+        
         const updatedCourse = { ...newCourseState, status: result.newStatus as Course['status'] };
         setCourse(updatedCourse);
         if (result.allCompleted) {
