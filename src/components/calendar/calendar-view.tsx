@@ -66,9 +66,9 @@ export default function CalendarView({ courses }: { courses: Course[] }) {
       <Card className="overflow-hidden shadow-lg min-w-[900px]">
         <div className="grid grid-cols-[12rem,repeat(5,minmax(0,1fr))]">
             {/* Header Row */}
-            <div className="p-3 font-bold font-headline bg-muted/50 border-b border-r">Raum</div>
+            <div className="p-3 font-bold font-headline bg-accent text-accent-foreground border-b border-r">Raum</div>
             {weekDays.map((day) => (
-            <div key={day.toISOString()} className="p-3 font-bold font-headline text-center bg-muted/50 border-b border-r last:border-r-0">
+            <div key={day.toISOString()} className="p-3 font-bold font-headline text-center bg-accent text-accent-foreground border-b border-r last:border-r-0">
                 <div className='capitalize'>{format(day, 'E', { locale: de })}.</div>
                 <div className="text-sm font-normal">{format(day, 'dd.MM', { locale: de })}</div>
             </div>
