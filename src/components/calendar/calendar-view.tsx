@@ -13,10 +13,10 @@ import { ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
 
 const rooms = ['Grosser Schulungsraum', 'Kleiner Schulungsraum'];
 
-const statusColors = {
-  'not-started': 'bg-chart-1',
-  'in-progress': 'bg-chart-4',
-  'completed': 'bg-chart-2',
+const statusStyles = {
+  'not-started': 'bg-chart-1/20 border-2 border-chart-1 text-foreground',
+  'in-progress': 'bg-chart-4/20 border-2 border-chart-4 text-foreground',
+  'completed': 'bg-chart-2/20 border-2 border-chart-2 text-foreground',
 };
 
 export default function CalendarView({ courses }: { courses: Course[] }) {
@@ -97,8 +97,7 @@ export default function CalendarView({ courses }: { courses: Course[] }) {
                         <div
                             className={cn(
                             'w-full p-2 rounded-lg shadow-md transition-transform transform group-hover:scale-105 group-hover:shadow-xl',
-                            statusColors[course.status],
-                            course.status === 'in-progress' ? 'text-black' : 'text-white'
+                            statusStyles[course.status]
                             )}
                         >
                             <p className="font-semibold text-sm truncate">{course.name}</p>

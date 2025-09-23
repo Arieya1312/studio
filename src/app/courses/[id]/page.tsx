@@ -11,15 +11,15 @@ function StatusBadge({ status }: { status: 'not-started' | 'in-progress' | 'comp
   const statusMap = {
     'not-started': {
       label: 'Vorbereitung nicht gestartet',
-      className: 'bg-chart-1 text-white hover:bg-chart-1/90',
+      className: 'bg-chart-1/20 border-2 border-chart-1 text-foreground',
     },
     'in-progress': {
       label: 'Vorbereitung in Arbeit',
-      className: 'bg-chart-4 text-black hover:bg-chart-4/90',
+      className: 'bg-chart-4/20 border-2 border-chart-4 text-foreground',
     },
     'completed': {
       label: 'Vorbereitung erledigt',
-      className: 'bg-chart-2 text-white hover:bg-chart-2/90',
+      className: 'bg-chart-2/20 border-2 border-chart-2 text-foreground',
     },
   };
 
