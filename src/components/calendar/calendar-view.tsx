@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -8,7 +9,7 @@ import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { format, addDays, subDays, startOfWeek, isSameDay } from 'date-fns';
 import { de } from 'date-fns/locale';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
 
 const rooms = ['Grosser Schulungsraum', 'Kleiner Schulungsraum'];
 
@@ -35,7 +36,15 @@ export default function CalendarView({ courses }: { courses: Course[] }) {
   return (
     <div className="flex flex-col h-full bg-background">
       <header className="flex items-center justify-between gap-4 border-b px-4 h-16 md:px-6">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+            <Button variant="outline" size="icon" className="h-8 w-8" asChild>
+                <Link href="/">
+                    <ArrowLeft className="h-4 w-4" />
+                    <span className="sr-only">Zurück zur Startseite</span>
+                </Link>
+            </Button>
+        </div>
+        <div className='flex items-center gap-4'>
             <span className="text-xl font-semibold capitalize font-headline">
               {format(currentDate, 'MMMM yyyy', { locale: de })}
             </span>
