@@ -1,7 +1,7 @@
 import { getCourses } from '@/lib/data';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 
@@ -23,7 +23,7 @@ function StatusBadge({ status }: { status: 'not-started' | 'in-progress' | 'comp
 
   const { label, className } = statusMap[status];
 
-  return <Badge className={cn('text-xs', className)}>{label}</Badge>;
+  return <Badge className={cn('text-xs absolute top-4 right-4', className)}>{label}</Badge>;
 }
 
 export default async function Home() {
@@ -34,25 +34,22 @@ export default async function Home() {
       <main className="flex-1 container mx-auto p-4 md:p-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4">
-            Kurstage Manager
-          </h1>
-          <p className="text-muted-foreground text-lg">
             Übersicht der anstehenden Kurse
-          </p>
+          </h1>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {courses.map((course) => (
-            <Link href={`/courses/${course.id}`} key={course.id}>
-              <Card className="h-full transition-shadow duration-300 hover:shadow-xl hover:border-primary/50">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <CardTitle className="font-headline text-xl mb-2">{course.name}</CardTitle>
-                    <StatusBadge status={course.status} />
-                  </div>
-                  <p className="text-sm text-muted-foreground">{course.date}</p>
-                  <p className="text-sm text-muted-foreground">{course.room}</p>
+            <Link href={`/courses/${course.id}`} key={course.id} className="flex">
+              <Card className="w-full flex flex-col transition-shadow duration-300 hover:shadow-xl hover:border-primary/50">
+                <CardHeader className="relative pb-4">
+                  <CardTitle className="font-headline text-xl mb-2 pr-24">{course.name}</CardTitle>
+                  <StatusBadge status={course.status} />
                 </CardHeader>
+                <CardContent className="flex-grow flex flex-col justify-end">
+                    <p className="text-sm text-muted-foreground">{course.date}</p>
+                    <p className="text-sm text-muted-foreground">{course.room}</p>
+                </CardContent>
               </Card>
             </Link>
           ))}
