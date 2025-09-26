@@ -4,6 +4,9 @@ Dieses Projekt zeigt die Benutzeroberfläche und Funktionalität unserer Alltron
 
 ---
 
+<img width="710" height="445" alt="image" src="https://github.com/user-attachments/assets/0976d5ce-556f-4a94-b89d-189a3aa54b90" />
+
+
 ## HomePage
 
 Auf der Startseite sieht man oben das **Alltron Academy Logo**, das auf jeder Ansicht sichtbar ist, jedoch keine Funktion hat.  
